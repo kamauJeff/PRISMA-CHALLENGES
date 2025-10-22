@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+//creating department model
+model Department {
+  id String @unique @map("DepartmentId")
+  departmentName String @map("DepartmentName")
+  location String @map("DepartmentLocation")
+  
+  employees Employee[]
+
+@@map("Departments")
+@@id([id, departmentName])
+}
+
+// creating employees models
+model Employee {
+id String @id @map("EmployeeId")
+firstName String @map("FirstName")
+lastName String @map("LastName")
+email String @unique @map("Email")
+salary Decimal @map("Salary")
+departmentId String @map("DepartmentId")
+
+department Department @relation(fields: [departmentId], references: [id])
+
+@@map("Employees")
+}
+
+
